@@ -1,1 +1,124 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-indigo-50: #f1efff;
+  --color-indigo-100: #e7e2ff;
+  --color-indigo-200: #d8cfff;
+  --color-indigo-300: #bbadfd;
+  --color-indigo-500: #705cf6;
+  --color-indigo-600: #5945e7;
+  --color-indigo-700: #4d38c7;
+  --color-indigo-800: #402da8;
+}
+
+:root {
+  color-scheme: light;
+  color: #1a1b32;
+  background: #f7f8fc;
+  font-family: Inter, 'Segoe UI', system-ui, sans-serif;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-width: 300px;
+  min-height: 100dvh;
+}
+
+.page-width {
+  width: min(100% - 2rem, 1272px);
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .page-width {
+    width: min(100% - 4rem, 1272px);
+  }
+}
+
+.search-field {
+  height: 40px;
+  border-color: #e8e8f1;
+  padding-right: 60px;
+  background-color: #f7f7fb;
+}
+
+.search-field::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.dashboard-hero {
+  background: linear-gradient(108deg, #33257f, #5136bc 57%, #654de3);
+}
+
+.compose-button {
+  background-color: #fff;
+  color: #4937bd;
+}
+
+.compose-button:hover {
+  background-color: #f2edff;
+}
+
+.hero-rings {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  right: -55px;
+  width: 380px;
+  height: 380px;
+  transform: translateY(-50%);
+  border-radius: 100%;
+  background: repeating-radial-gradient(circle, transparent 0 21px, #ffffff24 22px 23px, transparent 24px 31px);
+  mask-image: linear-gradient(90deg, transparent, #000 55%);
+}
+
+.login-art {
+  background: radial-gradient(ellipse at 70% 35%, #7357ff, #4c35cb 54%, #302087);
+}
+
+.login-orbit {
+  position: absolute;
+  aspect-ratio: 1;
+  border: 1px solid #ffffff4c;
+  border-radius: 50%;
+}
+
+.login-orbit-outer {
+  width: 82%;
+}
+
+.login-orbit-inner {
+  width: 66%;
+}
+
+.google-mark {
+  background: conic-gradient(#4285f4 0 29%, #34a853 29% 52%, #fbbc05 52% 69%, #ea4335 69% 88%, #4285f4 88%);
+  background-clip: text;
+  color: transparent;
+  font-family: Arial, sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.email-table th {
+  color: #586078;
+  background-color: #fafafe;
+  letter-spacing: 0.055em;
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.55s ease-in-out infinite alternate;
+  border-radius: 6px;
+  background: #e9e8f4;
+}
+
+@keyframes skeleton-pulse {
+  from { opacity: 0.62; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}

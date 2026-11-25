@@ -61,7 +61,8 @@ export function SlackControl() {
         <Check size={15} aria-hidden="true" /> Slack connected
       </span>
       <Button variant="ghost" size="sm" aria-label="Disconnect Slack" title="Disconnect Slack" className="min-h-7 p-1 text-emerald-800 hover:bg-emerald-100" isLoading={disconnecting} onClick={() => void disconnect()}>
-        {!disconnecting && <X size={15} aria-hidden="true" />}
+        <span className="hidden xl:inline">{disconnecting ? 'Disconnecting…' : 'Disconnect'}</span>
+        {!disconnecting && <X size={15} aria-hidden="true" className="xl:hidden" />}
       </Button>
     </div>
   );

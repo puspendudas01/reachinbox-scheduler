@@ -5,7 +5,6 @@ import { useAuth } from '../hooks/useAuth';
 import type { User } from '../types';
 import { Brand } from './Brand';
 import { Button } from './ui/Button';
-import { EmptyState } from './ui/EmptyState';
 import { Input } from './ui/Input';
 import { Spinner } from './ui/Spinner';
 import { SlackControl } from '../features/slack/SlackControl';
@@ -26,7 +25,7 @@ function Avatar({ user }: { user: User }) {
 }
 
 export function ProtectedLayout() {
-  const { state, retry, logout, loggingOut } = useAuth();
+  const { state, logout, loggingOut } = useAuth();
   const [query, setQuery] = useState('');
   const search = useRef<HTMLInputElement>(null);
 
@@ -43,14 +42,6 @@ export function ProtectedLayout() {
 
   if (state.status === 'loading') {
     return <main className="grid min-h-dvh place-items-center text-indigo-600"><Spinner size="lg" label="Checking your session" /></main>;
-  }
-  if (state.status === 'error') {
-    return (
-      <main className="mx-auto grid min-h-dvh max-w-md content-center gap-6 p-5">
-        <Brand />
-        <EmptyState title="Could not check your session" description={state.message} action={<Button onClick={retry}>Try again</Button>} />
-      </main>
-    );
   }
   if (state.status !== 'authenticated') return <Navigate to="/login" replace />;
 

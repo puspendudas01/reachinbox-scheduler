@@ -1,11 +1,16 @@
 import React from 'react';
 
-export const Table: React.FC<React.TableHTMLAttributes<HTMLTableElement>> = ({
+interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
+  flush?: boolean;
+}
+
+export const Table: React.FC<TableProps> = ({
   className = '',
+  flush,
   children,
   ...props
 }) => (
-  <div className="w-full overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-xs">
+  <div className={`w-full overflow-x-auto bg-white ${flush ? '' : 'rounded-xl border border-slate-200 shadow-xs'}`}>
     <table className={`w-full text-left text-sm text-slate-600 ${className}`} {...props}>
       {children}
     </table>

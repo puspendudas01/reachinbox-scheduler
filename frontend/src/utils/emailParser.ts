@@ -1,7 +1,7 @@
 import type { ParseEmailsResult } from '../types';
 
 const emailPattern = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i;
-const emailHeaders = new Set(['email', 'emails', 'e-mail', 'mail', 'email address', 'email_address', 'emailaddress']);
+const emailHeaders = new Set(['email', 'emails', 'e-mail', 'mail', 'email address', 'e-mail address', 'email_address', 'emailaddress']);
 
 export function isValidEmail(email: string) {
   const local = email.split('@', 1)[0];

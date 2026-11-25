@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 export interface TabItem<T extends string = string> {
   id: T;
@@ -12,6 +12,7 @@ export interface TabsProps<T extends string = string> {
   activeTab: T;
   onChange: (id: T) => void;
   className?: string;
+  panelId?: string;
 }
 
 export function Tabs<T extends string = string>({
@@ -19,23 +20,47 @@ export function Tabs<T extends string = string>({
   activeTab,
   onChange,
   className = '',
+  panelId,
 }: TabsProps<T>): React.ReactElement {
+  const buttons = useRef(new Map<T, HTMLButtonElement>());
+
   return (
     <div className={`border-b border-slate-200 ${className}`}>
-      <nav className="-mb-px flex space-x-6" aria-label="Tabs">
-        {tabs.map((tab) => {
+      <div className="-mb-px flex gap-4 sm:gap-6" role="tablist" aria-label="Email categories">
+        {tabs.map((tab, index) => {
           const isActive = tab.id === activeTab;
           return (
             <button
               key={tab.id}
+              id={panelId ? `${panelId}-${tab.id}` : undefined}
               type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={panelId}
+              tabIndex={isActive ? 0 : -1}
+              ref={(element) => {
+                if (element) buttons.current.set(tab.id, element);
+                else buttons.current.delete(tab.id);
+              }}
               onClick={() => onChange(tab.id)}
-              className={`group inline-flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm transition-all duration-150 cursor-pointer ${
+              onKeyDown={(event) => {
+                const positions: Record<string, number> = {
+                  ArrowLeft: (index - 1 + tabs.length) % tabs.length,
+                  ArrowRight: (index + 1) % tabs.length,
+                  Home: 0,
+                  End: tabs.length - 1,
+                };
+                const next = tabs[positions[event.key]];
+                if (!next) return;
+                event.preventDefault();
+                onChange(next.id);
+                buttons.current.get(next.id)?.focus();
+              }}
+              className={`group inline-flex cursor-pointer items-center gap-1.5 whitespace-nowrap border-b-2 px-0.5 py-4 text-sm font-medium transition-colors sm:gap-2 ${
                 isActive
                   ? 'border-indigo-600 text-indigo-600 font-semibold'
                   : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
               }`}
-              aria-current={isActive ? 'page' : undefined}
             >
               {tab.icon && (
                 <span
@@ -61,7 +86,7 @@ export function Tabs<T extends string = string>({
             </button>
           );
         })}
-      </nav>
+      </div>
     </div>
   );
 }
