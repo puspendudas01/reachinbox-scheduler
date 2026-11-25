@@ -1,0 +1,44 @@
+{
+  "name": "reachinbox-scheduler",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "engines": {
+    "node": "^22.13.0 || >=24.0.0"
+  },
+  "scripts": {
+    "dev": "concurrently --kill-others --names api,worker,web \"npm:dev:backend\" \"npm:dev:worker\" \"npm:dev:frontend\"",
+    "dev:all": "npm run infra:up && npm run db:deploy && npm run db:generate && npm run dev",
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:worker": "npm run dev:worker --workspace backend",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "infra:up": "docker compose up -d --wait",
+    "infra:down": "docker compose down",
+    "db:generate": "npm run db:generate --workspace backend",
+    "db:deploy": "npm run db:deploy --workspace backend",
+    "loadtest": "npm run loadtest --workspace backend",
+    "search:reindex": "npm run search:reindex --workspace backend",
+    "build": "npm run build --workspaces",
+    "start": "concurrently --kill-others --names api,worker \"npm:start:backend\" \"npm:start:worker\"",
+    "start:backend": "npm run start --workspace backend",
+    "start:worker": "npm run start:worker --workspace backend",
+    "preview:frontend": "npm run preview --workspace frontend",
+    "typecheck": "npm run typecheck --workspaces",
+    "lint": "npm run lint --workspace backend",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "overrides": {
+    "@prisma/config": {
+      "deepmerge-ts": "^8.0.0",
+      "effect": "^3.22.1"
+    }
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "prettier": "^3.6.2"
+  }
+}

@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EmailStatus {
+  scheduled
+  sent
+  failed
+  cancelled
+}
+
+model User {
+  id              String           @id @default(uuid()) @db.Uuid
+  googleId        String           @unique
+  email           String           @unique
+  name            String
+  avatar          String?
+  campaigns       Campaign[]
+  emails          Email[]
+  slackConnection SlackConnection?
+}
+
+model SlackConnection {
+  userId      String @id @db.Uuid
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamName    String
+  accessToken String
+  channelId   String
+  webhookUrl  String
+}
+
+model Sender {
+  id       String  @id @default(uuid()) @db.Uuid
+  email    String  @unique
+  smtpHost String
+  smtpPort Int
+  user     String
+  pass     String
+  emails   Email[]
+}
+
+model Campaign {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+  subject     String
+  body        String
+  startTime   DateTime @db.Timestamptz(3)
+  delayMs     Int
+  hourlyLimit Int
+  emails      Email[]
+
+  @@index([userId])
+}
+
+model Email {
+  id            String      @id @default(uuid()) @db.Uuid
+  campaignId    String      @db.Uuid
+  campaign      Campaign    @relation(fields: [campaignId], references: [id])
+  userId        String      @db.Uuid
+  user          User        @relation(fields: [userId], references: [id])
+  toEmail       String
+  subject       String
+  body          String
+  scheduledAt   DateTime    @db.Timestamptz(3)
+  sentAt        DateTime?   @db.Timestamptz(3)
+  status        EmailStatus @default(scheduled)
+  senderId      String?     @db.Uuid
+  sender        Sender?     @relation(fields: [senderId], references: [id])
+  attempts      Int         @default(0)
+  error         String?
+  previewUrl    String?
+  searchDirty   Boolean     @default(true)
+  searchVersion Int         @default(1)
+
+  @@unique([campaignId, toEmail])
+  @@index([userId, status, scheduledAt])
+  @@index([status, id])
+  @@index([searchDirty, id])
+}
